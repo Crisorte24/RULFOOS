@@ -35,7 +35,7 @@ function startVoiceNavigation() {
                 "Accediendo a la página de servicios."
             ];
             speak(getRandomMessage(messages));
-            window.location.href = "Servicios rulfoos php.php";
+            window.location.href = "servicios rulfoos php.php";
         } else if (speechResult.includes("productos")) {
             const messages = [
                 "Redirigiendo a la página de productos.",
@@ -43,7 +43,7 @@ function startVoiceNavigation() {
                 "Mostrando la página de productos."
             ];
             speak(getRandomMessage(messages));
-            window.location.href = "carrito rulfoos php.php";
+            window.location.href = "productos rulfoos php.php";
         } else if (speechResult.includes("contacto")) {
             const messages = [
                 "Redirigiendo a la página de contacto.",
@@ -52,7 +52,7 @@ function startVoiceNavigation() {
             ];
             speak(getRandomMessage(messages));
             window.location.href = "contacto rulfos php.php";
-        } else if (speechResult.includes("iniciarsesion") || speechResult.includes("login")) {
+        } else if (speechResult.includes("iniciar sesión") || speechResult.includes("iniciar sesion") || speechResult.includes("login")) {
             const messages = [
                 "Redirigiendo a la página de iniciar sesion.",
                 "Llevándote a la página de login.",

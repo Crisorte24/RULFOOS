@@ -1,62 +1,68 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 from flask_cors import CORS
 import mysql.connector
 import smtplib
 from email.mime.text import MIMEText
-from config import EMAIL_SENDER, EMAIL_PASSWORD
-
-BD = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="gool"
-)
-
-app = Flask(__name__)
-
-CORS(app)
+from config import EMAIL_SENDER, EMAIL_PASSWORD, EMAIL_RECEIVER
 
 # Configuración del correo
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
-# EMAIL_SENDER y EMAIL_PASSWORD se leen de config.py (no se sube a Git)
+# EMAIL_SENDER, EMAIL_PASSWORD y EMAIL_RECEIVER se leen de config.py (no se sube a Git)
+
+app = Flask(__name__)
+
+# Solo la página servida por XAMPP en esta computadora puede llamar a la API.
+CORS(app, origins=[r"^http://(localhost|127\.0\.0\.1)(:\d+)?$"])
+
+
+def conectar_bd():
+    # Una conexión nueva por petición: así no falla si MySQL cerró una conexión vieja.
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="",
+        database="gool"
+    )
+
 
 def enviar_correo(resultado, correo):
-    noprods= len(resultado)
-    body=""
-    for i in range (0,noprods):
-        msg1= f"Producto: {resultado[i][0]}\n"
-        msg2= f"Precio: {resultado[i][1]}\n"
-        msg3= f"Cantidad: {resultado[i][2]}\n"
-        msg4= "\n"
-        body = body + msg1 + msg2 + msg3 + msg4
+    body = ""
+    for nombre, precio, cantidad in resultado:
+        body += f"Producto: {nombre}\nPrecio: {precio}\nCantidad: {cantidad}\n\n"
 
-    mensaje = MIMEText(str(body))
-
+    mensaje = MIMEText(body)
     mensaje["Subject"] = "Inventario Actual"
     mensaje["From"] = EMAIL_SENDER
     mensaje["To"] = correo
-    try:
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-            server.starttls()
-            server.login(EMAIL_SENDER, EMAIL_PASSWORD)
-            server.sendmail(EMAIL_SENDER, correo, mensaje.as_string())
-        print("Correo enviado exitosamente.")
-    except Exception as e:
-        print(f"Error al enviar el correo: {e}")
+
+    with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+        server.starttls()
+        server.login(EMAIL_SENDER, EMAIL_PASSWORD)
+        server.sendmail(EMAIL_SENDER, correo, mensaje.as_string())
+
 
 @app.route('/obt_inv', methods=['POST'])
 def obt_inv():
-    correo = request.json['correo']
-    MiCursor = BD.cursor()
-    MiCursor.execute("SELECT nombre, precio1, cantidad FROM PRODUCTOS")
-    resultado = MiCursor.fetchall()
-    
-    # Enviar correo con los resultados
-    enviar_correo(resultado, correo)
-    
-    #return jsonify(resultado)
-    return jsonify({"status": "ok"})
+    # El destinatario es fijo (config.py): así nadie puede usar la API
+    # para mandar correos a cualquier dirección.
+    try:
+        bd = conectar_bd()
+        try:
+            cursor = bd.cursor()
+            cursor.execute("SELECT nombre, precio1, cantidad FROM productos")
+            resultado = cursor.fetchall()
+        finally:
+            bd.close()
+
+        enviar_correo(resultado, EMAIL_RECEIVER)
+        print("Correo enviado exitosamente.")
+        return jsonify({"status": "ok"})
+    except Exception as e:
+        print(f"Error al enviar el reporte: {e}")
+        return jsonify({"status": "error", "mensaje": str(e)}), 500
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # debug=False: el modo debug permite ejecutar código desde el navegador si hay un error.
+    app.run(host="127.0.0.1", port=5000, debug=False)

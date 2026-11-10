@@ -1,26 +1,18 @@
 <?php
-$conn = new mysqli("localhost", "root", "", "gool");
+// Devuelve en JSON los productos cuyo nombre contiene el texto buscado (?q=...).
+header('Content-Type: application/json; charset=utf-8');
+require 'conexion.php';
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+$query = trim($_GET['q'] ?? '');
+$productos = [];
 
-$query = isset($_GET['q']) ? $_GET['q'] : '';
-
-if ($query) {
-    $stmt = $conn->prepare("SELECT nombre FROM productos WHERE nombre LIKE ?");
-    $searchQuery = "%" . $query . "%";
-    $stmt->bind_param("s", $searchQuery);
+if ($query !== '') {
+    $stmt = $conn->prepare('SELECT id, nombre FROM productos WHERE nombre LIKE ? ORDER BY nombre LIMIT 10');
+    $busqueda = '%' . $query . '%';
+    $stmt->bind_param('s', $busqueda);
     $stmt->execute();
-    $result = $stmt->get_result();
-
-    $productos = [];
-    while ($row = $result->fetch_assoc()) {
-        $productos[] = $row;
-    }
-
-    echo json_encode($productos);
+    $productos = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
 $conn->close();
-?>
+echo json_encode($productos);

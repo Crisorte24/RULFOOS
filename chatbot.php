@@ -3,13 +3,10 @@
 header('Content-Type: application/json');
 
 // Conexión a la base de datos
-$conn = new mysqli("localhost", "root", "", "gool");
-if ($conn->connect_error) {
-    die(json_encode(['error' => 'Connection failed: ' . $conn->connect_error]));
-}
+require 'conexion.php';
 
 // Obtener el mensaje del usuario
-$mensaje = isset($_POST['mensaje']) ? $mensaje = trim($_POST['mensaje']) : '';
+$mensaje = trim($_POST['mensaje'] ?? '');
 
 // Lógica para procesar el mensaje y generar una respuesta
 $respuesta = [];

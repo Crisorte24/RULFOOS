@@ -228,3 +228,10 @@ header h1{
     }
   }
 
+
+
+/* Contenedor del botón de PayPal (se muestra al dar clic en "Pagar") */
+#paypal-button-container {
+    display: none;
+    margin-top: 20px;
+}

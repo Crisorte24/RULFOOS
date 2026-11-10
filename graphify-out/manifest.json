@@ -1,0 +1,146 @@
+{
+  "admin.php": {
+    "mtime": 1794283002.1169045,
+    "seen": 1794284638.7225518,
+    "ast_hash": "0bd7e846b3f704d8d4110b13a64b8115",
+    "semantic_hash": "0bd7e846b3f704d8d4110b13a64b8115"
+  },
+  "admin_promociones.php": {
+    "mtime": 1794283030.3386705,
+    "seen": 1794284638.7225575,
+    "ast_hash": "6e1420dec5eb62398fe87dd95cce153c",
+    "semantic_hash": "6e1420dec5eb62398fe87dd95cce153c"
+  },
+  "apiRulfos.py": {
+    "mtime": 1794283047.1404135,
+    "seen": 1794284638.7225602,
+    "ast_hash": "a3126394bdde9de0976f3c2b8fb49acf",
+    "semantic_hash": "a3126394bdde9de0976f3c2b8fb49acf"
+  },
+  "auth.php": {
+    "mtime": 1794282944.628245,
+    "seen": 1794284638.7225616,
+    "ast_hash": "50a369f0b351c83086fcdf1e9e1a9540",
+    "semantic_hash": "50a369f0b351c83086fcdf1e9e1a9540"
+  },
+  "buscar_productos.php": {
+    "mtime": 1794283152.6533651,
+    "seen": 1794284638.722563,
+    "ast_hash": "0fcd5b8e046fd37f5c432f113bb7b00a",
+    "semantic_hash": "0fcd5b8e046fd37f5c432f113bb7b00a"
+  },
+  "carrito.js": {
+    "mtime": 1794283485.0874152,
+    "seen": 1794284638.7225645,
+    "ast_hash": "9e62245dc0a0b5c7b8e97f4cd2dd79b4",
+    "semantic_hash": "9e62245dc0a0b5c7b8e97f4cd2dd79b4"
+  },
+  "chatbot.php": {
+    "mtime": 1794283226.6658168,
+    "seen": 1794284638.7225657,
+    "ast_hash": "f33c6bbd518deb683ff56ad405e32951",
+    "semantic_hash": "f33c6bbd518deb683ff56ad405e32951"
+  },
+  "conexion.php": {
+    "mtime": 1794282943.7448866,
+    "seen": 1794284638.7225666,
+    "ast_hash": "1937aedfdc1ff05f24b6a6fca66f5368",
+    "semantic_hash": "1937aedfdc1ff05f24b6a6fca66f5368"
+  },
+  "config.example.py": {
+    "mtime": 1794283048.8969238,
+    "seen": 1794284638.7225678,
+    "ast_hash": "a012e8934d911f28577d127d3d552ba5",
+    "semantic_hash": "a012e8934d911f28577d127d3d552ba5"
+  },
+  "contacto rulfos php.php": {
+    "mtime": 1794283514.1744118,
+    "seen": 1794284638.7225688,
+    "ast_hash": "8489343b3470b3765a1d2571a4bfae97",
+    "semantic_hash": "8489343b3470b3765a1d2571a4bfae97"
+  },
+  "database/gool.sql": {
+    "mtime": 1794283348.0296118,
+    "seen": 1794284638.72257,
+    "ast_hash": "78a2ddfd9dd01d83297930b7abf23ea8",
+    "semantic_hash": "78a2ddfd9dd01d83297930b7abf23ea8"
+  },
+  "delete.php": {
+    "mtime": 1794283003.0142705,
+    "seen": 1794284638.722571,
+    "ast_hash": "1aeded668ea5a4186be218d47ff95956",
+    "semantic_hash": "1aeded668ea5a4186be218d47ff95956"
+  },
+  "fontello-a540fdbf/config.json": {
+    "mtime": 1726922228.0,
+    "seen": 1794284638.7225723,
+    "ast_hash": "85a5271a25167a75b8754cdb7ac8a98b",
+    "semantic_hash": "85a5271a25167a75b8754cdb7ac8a98b"
+  },
+  "funcion asistente voz.js": {
+    "mtime": 1794283215.704872,
+    "seen": 1794284638.7225733,
+    "ast_hash": "aac4fa613d70f0233d7f453b07dfa231",
+    "semantic_hash": "aac4fa613d70f0233d7f453b07dfa231"
+  },
+  "inicio rulfoos.php": {
+    "mtime": 1794283514.1744118,
+    "seen": 1794284638.7225747,
+    "ast_hash": "a9ab9225efb3071146d273d012a11820",
+    "semantic_hash": "a9ab9225efb3071146d273d012a11820"
+  },
+  "login.php": {
+    "mtime": 1794282968.8239715,
+    "seen": 1794284638.7225757,
+    "ast_hash": "0e71eafb5fcf0c0f2bfe7792b9f1953c",
+    "semantic_hash": "0e71eafb5fcf0c0f2bfe7792b9f1953c"
+  },
+  "logout.php": {
+    "mtime": 1727168530.0,
+    "seen": 1794284638.7225766,
+    "ast_hash": "0d34cdaff3871c62634bb9fdfe99a793",
+    "semantic_hash": "0d34cdaff3871c62634bb9fdfe99a793"
+  },
+  "menu3d.php": {
+    "mtime": 1794283215.875047,
+    "seen": 1794284638.7225778,
+    "ast_hash": "bd582c65cc50b810036a7bbfbc8933da",
+    "semantic_hash": "bd582c65cc50b810036a7bbfbc8933da"
+  },
+  "menu_add.php": {
+    "mtime": 1794283031.2159946,
+    "seen": 1794284638.7225788,
+    "ast_hash": "5576990c31a6b8f2a5cc2aa7633025d9",
+    "semantic_hash": "5576990c31a6b8f2a5cc2aa7633025d9"
+  },
+  "nuevo usuario.php": {
+    "mtime": 1794282969.6532366,
+    "seen": 1794284638.72258,
+    "ast_hash": "ecb9e962ba4a11f1506e87924f453cd0",
+    "semantic_hash": "ecb9e962ba4a11f1506e87924f453cd0"
+  },
+  "productos rulfoos php.php": {
+    "mtime": 1794283514.1744118,
+    "seen": 1794284638.722581,
+    "ast_hash": "760610cc043fbf38b1e166190865ec42",
+    "semantic_hash": "760610cc043fbf38b1e166190865ec42"
+  },
+  "registrar.php": {
+    "mtime": 1794283061.2813673,
+    "seen": 1794284638.722582,
+    "ast_hash": "e0a2ebec7907b477ff251d165db2563c",
+    "semantic_hash": "e0a2ebec7907b477ff251d165db2563c"
+  },
+  "servicios rulfoos php.php": {
+    "mtime": 1794283514.1744118,
+    "seen": 1794284638.7225835,
+    "ast_hash": "4f9e1b695c6a09f85de778845faa4c3c",
+    "semantic_hash": "4f9e1b695c6a09f85de778845faa4c3c"
+  },
+  "subir_imagen.php": {
+    "mtime": 1794282945.4768233,
+    "seen": 1794284638.7225845,
+    "ast_hash": "c514fc13a24791990db5e89ab6ece0f3",
+    "semantic_hash": "c514fc13a24791990db5e89ab6ece0f3"
+  }
+}

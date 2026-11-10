@@ -576,3 +576,45 @@ hr{
 }
 
 
+
+
+/* ===== Antes estaban escritos dentro de las páginas (style="") ===== */
+
+/* Total del carrito pequeño del menú */
+.total-mini {
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+/* Panel del buscador (inicio) */
+#suggestion-panel {
+    display: none;
+    position: fixed;
+    top: 80px;
+    left: 20px;
+    width: 300px;
+    max-width: calc(100% - 40px);
+    background-color: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    z-index: 200;
+}
+
+#product-search {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+#suggestions-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#suggestions-list a {
+    display: block;
+    padding: 5px 0;
+    color: #007bff;
+    text-decoration: none;
+}

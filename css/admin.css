@@ -46,7 +46,7 @@ label {
 }
 
 /* Entradas de texto */
-input[type="text"], input[type="number"], input[type="file"] {
+input[type="text"], input[type="file"] {
     width: 100%;
     padding: 12px; /* Reducir padding para mayor ajuste */
     margin: 10px 0;
@@ -57,7 +57,7 @@ input[type="text"], input[type="number"], input[type="file"] {
 }
 
 /* Botones */
-.login-btn, .btn-del {
+.login-btn, .btn-1 {
     width: 100%;
     padding: 12px; /* Mantener padding de los botones */
     background: linear-gradient(45deg, #409CCF, #366999); /* Botón degradado */
@@ -69,6 +69,26 @@ input[type="text"], input[type="number"], input[type="file"] {
     cursor: pointer;
     transition: background 0.3s ease;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra para el botón */
+}
+
+.login-btn:hover, .btn-1:hover {
+    background: linear-gradient(45deg, #366999, #409CCF); /* Cambio de color en hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Sombra más intensa en hover */
+}
+
+a, .btn-del {
+    width: 100%;
+    padding: 2px; /* Mantener padding de los botones */
+    background: linear-gradient(45deg, #409CCF, #366999); /* Botón degradado */
+    border: none;
+    border-radius: 25px; /* Bordes más redondeados */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra para el botón */
+    line-height: 3.0;
     display: flex;
     justify-content: center; /* Centra horizontalmente */
     margin-top: 20px; /* Espaciado adicional si es necesario */
@@ -78,6 +98,7 @@ input[type="text"], input[type="number"], input[type="file"] {
     background: linear-gradient(45deg, #366999, #409CCF); /* Cambio de color en hover */
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Sombra más intensa en hover */
 }
+
 
 /* Mensaje de error */
 .error {
@@ -105,4 +126,31 @@ th {
 
 tr:hover {
     background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Campos y mensajes agregados al corregir el panel */
+input[type="number"], input[type="url"], input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: black;
+}
+
+.success {
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+button.btn-del {
+    border: none;
+    cursor: pointer;
+    font: inherit;
+}
+
+/* Formulario dentro de una celda de la tabla (botón Eliminar) */
+.form-inline {
+    display: inline;
 }
