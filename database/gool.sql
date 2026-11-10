@@ -34,6 +34,7 @@ CREATE TABLE `contactos` (
   `email` varchar(150) NOT NULL,
   `asunto` varchar(150) NOT NULL DEFAULT '',
   `mensaje` text NOT NULL,
+  `leido` tinyint(1) NOT NULL DEFAULT 0,
   `fecha` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -52,7 +53,8 @@ CREATE TABLE `productos` (
   `imagen` varchar(50) NOT NULL,
   `url_3d` varchar(255) NOT NULL,
   `imagen_qr` varchar(255) DEFAULT NULL,
-  `cantidad` int(11) NOT NULL DEFAULT 0
+  `cantidad` int(11) NOT NULL DEFAULT 0,
+  CONSTRAINT `chk_cantidad_no_negativa` CHECK (`cantidad` >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -113,6 +115,42 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id`, `usuario`, `contrasena`, `huella_dactilar`) VALUES
 (1, 'admin', '$2y$10$IQWzSRKmgDCOafGGJWbT6OC00nHaF5yMXan4Ttdn7m26R/7vupqRq', ''); -- contraseña: admin123
+
+--
+-- Estructura de tabla para la tabla `ventas`
+-- (una fila por cada pago completado con PayPal)
+--
+
+CREATE TABLE `ventas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `referencia_pago` varchar(64) NOT NULL,
+  `total` decimal(10,2) NOT NULL,
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_referencia_pago` (`referencia_pago`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ventas_detalle`
+-- (qué artículos llevó cada venta, con el precio al momento de comprar)
+--
+
+CREATE TABLE `ventas_detalle` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `venta_id` int(11) NOT NULL,
+  `tipo` enum('producto','promo') NOT NULL,
+  `item_id` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL,
+  `precio` decimal(10,2) NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_venta` (`venta_id`),
+  CONSTRAINT `fk_detalle_venta` FOREIGN KEY (`venta_id`) REFERENCES `ventas` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
 
 --
 -- Índices para tablas volcadas

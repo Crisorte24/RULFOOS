@@ -3,6 +3,8 @@
 // El correo de destino se configura en config.py (EMAIL_RECEIVER), no aquí.
 const btnApi = document.getElementById("botonApi");
 
+const textoOriginal = btnApi.innerHTML;
+
 btnApi.addEventListener('click', function () {
     btnApi.disabled = true;
     btnApi.textContent = "Enviando...";
@@ -19,6 +21,6 @@ btnApi.addEventListener('click', function () {
         .catch(() => alert("No se pudo conectar con la API. ¿Está corriendo apiRulfos.py?"))
         .finally(() => {
             btnApi.disabled = false;
-            btnApi.textContent = "Reporte Inventario";
+            btnApi.innerHTML = textoOriginal;
         });
 });

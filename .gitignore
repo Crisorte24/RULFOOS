@@ -6,3 +6,6 @@ __pycache__/
 *.pyc
 
 graphify-out/
+
+# Llaves de PayPal
+config.php

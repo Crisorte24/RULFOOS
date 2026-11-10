@@ -1,130 +1,102 @@
 <?php
 require 'conexion.php';
+require 'paypal.php'; // llaves de PayPal (en config.php)
 
 $productos = $conn->query('SELECT * FROM productos ORDER BY id')->fetch_all(MYSQLI_ASSOC);
 $conn->close();
 
-// Client ID de PayPal: créalo en https://developer.paypal.com (Apps & Credentials).
-// Mientras diga TU_CLIENT_ID, el botón de pago avisará que falta configurarlo.
-$PAYPAL_CLIENT_ID = 'TU_CLIENT_ID';
+$titulo = 'Productos';
+$pagina = 'productos';
+require 'encabezado.php';
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos</title>
-    <link rel="stylesheet" href="css/tienda.css">
-    <link rel="stylesheet" href="css/pago.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-    <link rel="stylesheet" href="css/voz.css">
-</head>
-<body>
-    <button class="btn-vz" onclick="startVoiceNavigation()" title="Navegación por voz">
-        <i class="fa-solid fa-microphone"></i>
-    </button>
 
-    <header>
-        <div class="menu container">
-            <a href="inicio rulfoos.php" class="logo">RULFOOS</a>
-            <input type="checkbox" id="menu" />
-            <label for="menu"><img src="images/menu.png" class="menu-icono" alt="Menú"></label>
-            <nav class="navbar">
-                <ul>
-                    <li><a href="inicio rulfoos.php">Inicio</a></li>
-                    <li><a href="servicios rulfoos php.php">Servicios</a></li>
-                    <li><a href="productos rulfoos php.php">Productos</a></li>
-                    <li><a href="contacto rulfos php.php">Contacto</a></li>
-                </ul>
-            </nav>
-            <div>
-                <ul>
-                    <li class="submenu">
-                        <img src="images/car.svg" id="img-carrito" alt="Carrito">
-                        <div id="carrito">
-                            <table id="lista-carrito">
-                                <thead><tr><th></th></tr></thead>
-                                <tbody></tbody>
-                            </table>
-                            <p class="total-mini">Total: <span id="total-mini">$0.00</span></p>
-                            <a href="#" id="vaciar-carrito" class="btn-3">Vaciar Carrito</a>
-                            <a href="productos rulfoos php.php" class="btn-4">Ir a pagar</a>
+        <section class="seccion">
+            <div class="contenedor-ancho">
+                <div class="seccion-titulo">
+                    <h1>Productos</h1>
+                    <p>Audífonos, fundas, relojes y más. Revisa tu carrito antes de pagar.</p>
+                </div>
+
+                <div class="zona-compra">
+                    <!-- Lista de productos -->
+                    <div class="productos-grid contenedor-items">
+                        <?php foreach ($productos as $row):
+                            $stock  = (int) $row['cantidad'];
+                            $normal = (int) $row['precio1'];   // precio normal (tachado)
+                            $venta  = (int) $row['precio2'];   // precio de venta (el que se cobra)
+                        ?>
+                        <article class="tarjeta item<?= $stock < 1 ? ' item-agotado' : '' ?>" id="producto-<?= (int) $row['id'] ?>"
+                                 data-id="<?= (int) $row['id'] ?>"
+                                 data-titulo="<?= e($row['nombre']) ?>"
+                                 data-precio="<?= $venta ?>"
+                                 data-imagen="<?= e($row['imagen']) ?>"
+                                 data-stock="<?= $stock ?>">
+                            <div class="imagen-caja">
+                                <img src="<?= e($row['imagen']) ?>" alt="<?= e($row['nombre']) ?>" class="img-item" loading="lazy">
+                            </div>
+                            <span class="titulo-item"><?= e($row['nombre']) ?></span>
+                            <div class="precios">
+                                <?php if ($normal > $venta): ?>
+                                    <span class="precio-anterior">$<?= number_format($normal, 2) ?></span>
+                                <?php endif; ?>
+                                <span class="precio-actual precio-item">$<?= number_format($venta, 2) ?></span>
+                            </div>
+
+                            <?php if ($stock < 1): ?>
+                                <span class="stock-item agotado">Agotado</span>
+                            <?php elseif ($stock <= 3): ?>
+                                <span class="stock-item pocos">¡Solo quedan <?= $stock ?>!</span>
+                            <?php else: ?>
+                                <span class="stock-item">Disponibles: <?= $stock ?></span>
+                            <?php endif; ?>
+
+                            <?php if (!empty($row['url_3d']) || !empty($row['imagen_qr'])): ?>
+                            <div class="item-acciones">
+                                <?php if (!empty($row['url_3d'])): ?>
+                                    <a href="<?= e($row['url_3d']) ?>" class="btn btn-secundario btn-chico" target="_blank" rel="noopener">Ver 3D</a>
+                                <?php endif; ?>
+                                <?php if (!empty($row['imagen_qr'])): ?>
+                                    <button type="button" class="btn btn-suave btn-chico" data-qr="<?= e($row['imagen_qr']) ?>" onclick="mostrarQR(this.dataset.qr)">
+                                        <i class="fa-solid fa-qrcode" aria-hidden="true"></i> QR
+                                    </button>
+                                <?php endif; ?>
+                            </div>
+                            <?php endif; ?>
+
+                            <?php if ($stock < 1): ?>
+                                <button type="button" class="btn btn-primario btn-bloque boton-item" disabled>Agotado</button>
+                            <?php else: ?>
+                                <button type="button" class="btn btn-primario btn-bloque boton-item">Agregar al carrito</button>
+                            <?php endif; ?>
+                        </article>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <!-- Carrito de pago: es el mismo carrito del ícono del menú (ver carrito.js) -->
+                    <aside class="tarjeta carrito" id="carrito-pago" aria-label="Tu carrito">
+                        <div class="header-carrito">
+                            <h2>Tu carrito</h2>
                         </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </header>
-
-    <!-- Título -->
-    <section class="servicios-container">
-        <h2>Productos</h2>
-        <p>Verifica tus artículos antes de proceder al pago para asegurarte de que tienes todo lo que necesitas.</p>
-    </section>
-
-    <!-- Lista de productos -->
-    <section class="servicios-container">
-        <section class="contenedor">
-            <div class="contenedor-items">
-                <?php foreach ($productos as $row): ?>
-                    <div class="item" id="producto-<?= (int) $row['id'] ?>"
-                         data-id="<?= (int) $row['id'] ?>"
-                         data-titulo="<?= e($row['nombre']) ?>"
-                         data-precio="<?= e($row['precio1']) ?>"
-                         data-imagen="<?= e($row['imagen']) ?>">
-                        <span class="titulo-item"><?= e($row['nombre']) ?></span>
-                        <img src="<?= e($row['imagen']) ?>" alt="<?= e($row['nombre']) ?>" class="img-item">
-                        <span class="precio-item">$<?= number_format($row['precio1'], 2) ?></span>
-
-                        <?php if (!empty($row['url_3d'])): ?>
-                            <a href="<?= e($row['url_3d']) ?>" class="btn-1" target="_blank" rel="noopener">Ver 3D</a>
-                        <?php endif; ?>
-
-                        <?php if (!empty($row['imagen_qr'])): ?>
-                            <button class="btn-qr" data-qr="<?= e($row['imagen_qr']) ?>" onclick="mostrarQR(this.dataset.qr)">QR</button>
-                        <?php endif; ?>
-
-                        <button class="boton-item">Agregar al Carrito</button>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-
-            <!-- Carrito de pago: muestra el mismo carrito que el ícono del menú (ver carrito.js) -->
-            <div class="carrito" id="carrito-pago">
-                <div class="header-carrito">
-                    <h2>Tu Carrito</h2>
+                        <div class="carrito-items"></div>
+                        <div class="carrito-total">
+                            <div class="fila">
+                                <strong>Total</strong>
+                                <span class="carrito-precio-total">$0.00</span>
+                            </div>
+                            <button type="button" class="btn btn-oscuro btn-bloque btn-pagar">
+                                Pagar <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div id="paypal-button-container"></div>
+                    </aside>
                 </div>
-                <div class="carrito-items"></div>
-                <div class="carrito-total">
-                    <div class="fila">
-                        <strong class="ttl">Tu Total</strong>
-                        <span class="carrito-precio-total">$0.00</span>
-                    </div>
-                    <button class="btn-pagar">Pagar <i class="fa-solid fa-bag-shopping"></i></button>
-                </div>
-                <!-- Botón de PayPal oculto inicialmente -->
-                <div id="paypal-button-container"></div>
             </div>
         </section>
-    </section>
 
-    <!-- Modal QR -->
-    <div id="qrModal" class="modal">
-        <span class="close" onclick="cerrarQR()">&times;</span>
-        <img class="modal-content" id="qrImage" alt="Código QR">
-    </div>
-
-    <footer class="footer-container">
-        <div class="link">
-            <p>&copy; 2024 Tienda de Accesorios RULFOOS</p>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="js/carrito.js"></script>
-    <script src="js/voz.js"></script>
-    <script src="https://www.paypal.com/sdk/js?client-id=<?= urlencode($PAYPAL_CLIENT_ID) ?>&currency=MXN"></script>
-
-    <script src="js/productos.js"></script>
-</body>
-</html>
+<?php
+$scripts_pie = '';
+if (paypalConfigurado()) {
+    $scripts_pie .= '<script src="https://www.paypal.com/sdk/js?client-id=' . urlencode(PAYPAL_CLIENT_ID) . '&currency=' . PAYPAL_MONEDA . '"></script>';
+}
+$scripts_pie .= '<script src="js/productos.js"></script>';
+require 'pie.php';

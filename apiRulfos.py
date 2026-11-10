@@ -50,7 +50,7 @@ def obt_inv():
         bd = conectar_bd()
         try:
             cursor = bd.cursor()
-            cursor.execute("SELECT nombre, precio1, cantidad FROM productos")
+            cursor.execute("SELECT nombre, precio2, cantidad FROM productos")  # precio2 = precio de venta
             resultado = cursor.fetchall()
         finally:
             bd.close()

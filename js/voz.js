@@ -11,8 +11,11 @@ function startVoiceNavigation() {
     recognition.continuous = false;
     recognition.interimResults = false;
 
+    const boton = document.querySelector('.btn-vz');
+
     recognition.onstart = function() {
         console.log("Escuchando...");
+        if (boton) boton.classList.add('escuchando');
     };
 
     recognition.onresult = function(event) {
@@ -76,6 +79,7 @@ function startVoiceNavigation() {
 
     recognition.onend = function() {
         console.log("Reconocimiento de voz finalizado.");
+        if (boton) boton.classList.remove('escuchando');
     };
 
     // Iniciar la escucha de voz

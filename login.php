@@ -66,35 +66,46 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="css/login_sty.css"> <!-- Enlace a la hoja de estilos -->
-    <link rel="stylesheet" href="css/login.css">
-
-    <script src="js/login.js"></script>
+    <meta name="robots" content="noindex">
+    <title>Iniciar sesión | Admin RULFOOS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/login.js" defer></script>
 </head>
-<body>
-    <div class="login-container">
-        <div class="login-box">
-            <h2>Bienvenido a RULFOOS</h2>
-            <form method="POST" action="">
-                <label for="usuario">Usuario:</label>
+<body class="pagina-login">
+    <main class="tarjeta login-tarjeta">
+        <a href="inicio rulfoos.php" class="logo">RULFOOS<span>Accesorios</span></a>
+        <h1>Bienvenido</h1>
+        <p class="subtitulo">Inicia sesión para administrar la tienda</p>
+
+        <?php if ($error !== ''): ?>
+            <p class="aviso mal"><?php echo e($error); ?></p>
+        <?php endif; ?>
+
+        <form method="POST" action="">
+            <div class="campo">
+                <label for="usuario">Usuario</label>
                 <input type="text" id="usuario" name="usuario" required autocomplete="username"
                        value="<?php echo e($_POST['usuario'] ?? $_COOKIE['usuario'] ?? ''); ?>">
-                <br>
-                <label for="contrasena">Contraseña:</label>
-                <input type="password" id="contrasena" name="contrasena" required autocomplete="current-password">
-                <span id="toggle-password" class="toggle-password" onclick="togglePassword()">Mostrar</span>
-                <br>
-                <label><input type="checkbox" name="remember"
-                    <?php echo isset($_COOKIE['usuario']) ? 'checked' : ''; ?>>Recordar</label>
-                <br>
-                <button type="submit" class="btn-1">Entrar</button>
-                <a href="inicio rulfoos.php" class="btn-1">Inicio</a>
-            </form>
-            <?php if ($error !== ''): ?>
-                <p class="error"><?php echo e($error); ?></p>
-            <?php endif; ?>
-        </div>
-    </div>
+            </div>
+            <div class="campo">
+                <label for="contrasena">Contraseña</label>
+                <div class="campo-contrasena">
+                    <input type="password" id="contrasena" name="contrasena" required autocomplete="current-password">
+                    <button type="button" id="toggle-password" class="toggle-password" onclick="togglePassword()">Mostrar</button>
+                </div>
+            </div>
+            <label class="recordar">
+                <input type="checkbox" name="remember" <?php echo isset($_COOKIE['usuario']) ? 'checked' : ''; ?>>
+                Recordar mi usuario
+            </label>
+            <button type="submit" class="btn btn-primario btn-bloque">Entrar</button>
+        </form>
+
+        <a href="inicio rulfoos.php" class="login-volver">&larr; Volver a la tienda</a>
+    </main>
 </body>
 </html>

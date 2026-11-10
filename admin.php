@@ -6,9 +6,9 @@ require 'subir_imagen.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id        = (int) ($_POST['id'] ?? 0);           // 0 = producto nuevo
     $nombre    = trim($_POST['nombre'] ?? '');
-    $precio1   = (int) ($_POST['precio1'] ?? 0);
-    $precio2   = (int) ($_POST['precio2'] ?? 0);
-    $cantidad  = (int) ($_POST['cantidad'] ?? 0);
+    $precio1   = max(0, (int) ($_POST['precio1'] ?? 0));
+    $precio2   = max(0, (int) ($_POST['precio2'] ?? 0));
+    $cantidad  = max(0, (int) ($_POST['cantidad'] ?? 0)); // el inventario nunca es negativo
     $url_3d    = trim($_POST['url_3d'] ?? '');
 
     try {
@@ -72,106 +72,131 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $mensaje = flash();
 $result = $conn->query('SELECT * FROM productos ORDER BY id');
+
+$titulo = 'Productos';
+$seccion = 'productos';
+require 'admin_encabezado.php';
 ?>
+        <div class="admin-titulo">
+            <div>
+                <h1>Productos</h1>
+                <p>Agrega, edita y revisa el inventario de la tienda.</p>
+            </div>
+        </div>
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/admin.css">
-    <title>Administración de Productos</title>
-</head>
-<body>
-    <div class="login-container">
-        <div class="login-box">
-            <h1>Administración de Productos</h1>
+        <?php if ($mensaje): ?>
+            <p class="aviso <?php echo strpos($mensaje, 'Error') === 0 ? 'mal' : 'ok'; ?>"><?php echo e($mensaje); ?></p>
+        <?php endif; ?>
 
-            <?php if ($mensaje): ?>
-                <p class="<?php echo strpos($mensaje, 'Error') === 0 ? 'error' : 'success'; ?>"><?php echo e($mensaje); ?></p>
-            <?php endif; ?>
-
+        <section class="tarjeta admin-seccion">
             <h2 id="titulo-form">Nuevo producto</h2>
             <form method="POST" enctype="multipart/form-data" id="form-producto">
                 <input type="hidden" name="id" value="">
-                <label>Nombre:</label>
-                <input type="text" name="nombre" maxlength="50" required placeholder="Ingrese el nombre">
-                <label>Precio 1:</label>
-                <input type="number" name="precio1" min="0" step="1" required placeholder="Ingrese el precio 1">
-                <label>Precio 2:</label>
-                <input type="number" name="precio2" min="0" step="1" required placeholder="Ingrese el precio 2">
-                <label>Cantidad:</label>
-                <input type="number" name="cantidad" min="0" step="1" required placeholder="Ingrese la cantidad">
-                <label>Imagen: <small id="nota-imagen"></small></label>
-                <input type="file" name="imagen" accept="image/*" required>
-                <label>Imagen QR:</label>
-                <input type="file" name="imagen_qr" accept="image/*">
-                <label>URL de realidad aumentada / 3D:</label>
-                <input type="url" name="url_3d" placeholder="https://mywebar.com/p/...">
-
-                <button type="submit" class="login-btn">Guardar Producto</button>
-                <button type="button" class="btn-1" id="cancelar-edicion" hidden>Cancelar edición</button>
+                <div class="form-grid">
+                    <div class="campo campo-ancho">
+                        <label for="p-nombre">Nombre</label>
+                        <input type="text" id="p-nombre" name="nombre" maxlength="50" required placeholder="Ej. Airpods Pro 2">
+                    </div>
+                    <div class="campo">
+                        <label for="p-precio1">Precio normal <small>(se muestra tachado)</small></label>
+                        <input type="number" id="p-precio1" name="precio1" min="0" step="1" required placeholder="Ej. 2200">
+                    </div>
+                    <div class="campo">
+                        <label for="p-precio2">Precio de venta <small>(el que se cobra)</small></label>
+                        <input type="number" id="p-precio2" name="precio2" min="0" step="1" required placeholder="Ej. 1999">
+                    </div>
+                    <div class="campo">
+                        <label for="p-cantidad">Piezas en inventario</label>
+                        <input type="number" id="p-cantidad" name="cantidad" min="0" step="1" required placeholder="Ej. 10">
+                    </div>
+                    <div class="campo">
+                        <label for="p-url">Enlace de realidad aumentada <small>(opcional)</small></label>
+                        <input type="url" id="p-url" name="url_3d" placeholder="https://mywebar.com/p/...">
+                    </div>
+                    <div class="campo">
+                        <label for="p-imagen">Foto del producto <small id="nota-imagen"></small></label>
+                        <input type="file" id="p-imagen" name="imagen" accept="image/*" required>
+                    </div>
+                    <div class="campo">
+                        <label for="p-qr">Imagen del código QR <small>(opcional)</small></label>
+                        <input type="file" id="p-qr" name="imagen_qr" accept="image/*">
+                    </div>
+                </div>
+                <div class="form-acciones">
+                    <button type="submit" class="btn btn-primario">Guardar producto</button>
+                    <button type="button" class="btn btn-secundario" id="cancelar-edicion" hidden>Cancelar edición</button>
+                </div>
             </form>
+        </section>
 
-            <h2>Lista de Productos</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Precio 1</th>
-                        <th>Precio 2</th>
-                        <th>Cantidad</th>
-                        <th>Imagen</th>
-                        <th>Imagen QR</th>
-                        <th>URL realidad aumentada</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while ($row = $result->fetch_assoc()): ?>
+        <section class="tarjeta admin-seccion">
+            <h2>Lista de productos</h2>
+            <div class="tabla-scroll">
+                <table class="tabla">
+                    <thead>
                         <tr>
-                            <td><?php echo (int) $row['id']; ?></td>
-                            <td><?php echo e($row['nombre']); ?></td>
-                            <td><?php echo e($row['precio1']); ?></td>
-                            <td><?php echo e($row['precio2']); ?></td>
-                            <td><?php echo e($row['cantidad']); ?></td>
-                            <td><img src="<?php echo e($row['imagen']); ?>" alt="<?php echo e($row['nombre']); ?>" width="100"></td>
+                            <th>Foto</th>
+                            <th>Nombre</th>
+                            <th class="num">Precio normal</th>
+                            <th class="num">Precio de venta</th>
+                            <th>Inventario</th>
+                            <th>QR</th>
+                            <th>Realidad aumentada</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php while ($row = $result->fetch_assoc()): $stock = (int) $row['cantidad']; ?>
+                        <tr>
+                            <td><img src="<?php echo e($row['imagen']); ?>" alt="<?php echo e($row['nombre']); ?>"></td>
+                            <td><strong><?php echo e($row['nombre']); ?></strong><br><small class="ayuda">ID <?php echo (int) $row['id']; ?></small></td>
+                            <td class="num">$<?php echo number_format($row['precio1'], 2); ?></td>
+                            <td class="num"><strong>$<?php echo number_format($row['precio2'], 2); ?></strong></td>
+                            <td>
+                                <?php if ($stock < 1): ?>
+                                    <span class="estado peligro">Agotado</span>
+                                <?php elseif ($stock <= 3): ?>
+                                    <span class="estado alerta"><?php echo $stock; ?> piezas</span>
+                                <?php else: ?>
+                                    <span class="estado ok"><?php echo $stock; ?> piezas</span>
+                                <?php endif; ?>
+                            </td>
                             <td>
                                 <?php if (!empty($row['imagen_qr'])): ?>
-                                    <img src="<?php echo e($row['imagen_qr']); ?>" alt="QR <?php echo e($row['nombre']); ?>" width="100">
+                                    <img src="<?php echo e($row['imagen_qr']); ?>" alt="QR de <?php echo e($row['nombre']); ?>">
                                 <?php else: ?>
-                                    <p>No disponible</p>
+                                    <span class="ayuda">—</span>
                                 <?php endif; ?>
                             </td>
                             <td>
                                 <?php if (!empty($row['url_3d'])): ?>
-                                    <a href="<?php echo e($row['url_3d']); ?>" target="_blank" rel="noopener"><?php echo e($row['url_3d']); ?></a>
+                                    <a href="<?php echo e($row['url_3d']); ?>" class="enlace-corto" target="_blank" rel="noopener" title="<?php echo e($row['url_3d']); ?>"><?php echo e(preg_replace('#^https?://#', '', $row['url_3d'])); ?></a>
+                                <?php else: ?>
+                                    <span class="ayuda">—</span>
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <button type="button" class="btn-1 btn-editar"
-                                        data-id="<?php echo (int) $row['id']; ?>"
-                                        data-nombre="<?php echo e($row['nombre']); ?>"
-                                        data-precio1="<?php echo e($row['precio1']); ?>"
-                                        data-precio2="<?php echo e($row['precio2']); ?>"
-                                        data-cantidad="<?php echo e($row['cantidad']); ?>"
-                                        data-url3d="<?php echo e($row['url_3d']); ?>">Editar</button>
-                                <form method="POST" action="delete.php" class="form-inline"
-                                      onsubmit="return confirm('¿Eliminar este producto?');">
-                                    <input type="hidden" name="id" value="<?php echo (int) $row['id']; ?>">
-                                    <button type="submit" class="btn-del">Eliminar</button>
-                                </form>
+                                <div class="tabla-acciones">
+                                    <button type="button" class="btn btn-suave btn-chico btn-editar"
+                                            data-id="<?php echo (int) $row['id']; ?>"
+                                            data-nombre="<?php echo e($row['nombre']); ?>"
+                                            data-precio1="<?php echo e($row['precio1']); ?>"
+                                            data-precio2="<?php echo e($row['precio2']); ?>"
+                                            data-cantidad="<?php echo e($row['cantidad']); ?>"
+                                            data-url3d="<?php echo e($row['url_3d']); ?>">Editar</button>
+                                    <form method="POST" action="delete.php" class="form-inline"
+                                          onsubmit="return confirm('¿Eliminar este producto?');">
+                                        <input type="hidden" name="id" value="<?php echo (int) $row['id']; ?>">
+                                        <button type="submit" class="btn btn-peligro btn-chico">Eliminar</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     <?php endwhile; ?>
-                </tbody>
-            </table>
-
-            <button onclick="window.location.href='menu_add.php';" class="btn-1">Regresar al Menú</button>
-        </div>
-    </div>
-
-    <script src="js/admin.js"></script>
-</body>
-</html>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+<?php
+$scripts_pie = '<script src="js/admin.js"></script>';
+require 'admin_pie.php';

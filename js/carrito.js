@@ -40,12 +40,33 @@ let carritoEnMemoria = leerCarrito();
 
 // ---------- Operaciones ----------
 
-// item = { clave, titulo, precio (número), imagen }
+// Piezas disponibles de un artículo. Las promociones no llevan inventario (sin límite).
+// Si la página muestra ese producto, se usa el stock más reciente de la página.
+function stockDe(item) {
+    if (!item.clave.startsWith('producto-')) return Infinity;
+    const enPagina = document.getElementById(item.clave);
+    if (enPagina && enPagina.dataset.stock !== undefined) return parseInt(enPagina.dataset.stock, 10) || 0;
+    return typeof item.stock === 'number' ? item.stock : Infinity;
+}
+
+function avisarSinStock(item, stock) {
+    avisar(stock > 0 ? 'Solo hay ' + stock + ' pieza(s) de ' + item.titulo : item.titulo + ' está agotado');
+}
+
+// item = { clave, titulo, precio (número), imagen, stock (solo productos) }
 function agregarAlCarrito(item) {
-    const items = carritoEnMemoria.slice();
+    const items = carritoEnMemoria.map(i => ({ ...i }));
     const existente = items.find(i => i.clave === item.clave);
+    const stock = stockDe(item);
+    const yaTengo = existente ? existente.cantidad : 0;
+
+    if (yaTengo + 1 > stock) {
+        avisarSinStock(item, stock);
+        return;
+    }
     if (existente) {
         existente.cantidad += 1;
+        existente.stock = item.stock;
     } else {
         items.push({ ...item, cantidad: 1 });
     }
@@ -54,11 +75,42 @@ function agregarAlCarrito(item) {
 }
 
 function cambiarCantidad(clave, cambio) {
-    const items = carritoEnMemoria.slice();
+    const items = carritoEnMemoria.map(i => ({ ...i }));
     const item = items.find(i => i.clave === clave);
     if (!item) return;
+    const stock = stockDe(item);
+    if (cambio > 0 && item.cantidad + cambio > stock) {
+        avisarSinStock(item, stock);
+        return;
+    }
     item.cantidad = Math.max(1, item.cantidad + cambio);
     guardarCarrito(items);
+}
+
+// Al abrir la página de productos: si el stock bajó desde que se agregó algo, ajusta el carrito.
+function ajustarCarritoAlStock() {
+    let cambios = [];
+    const items = [];
+    carritoEnMemoria.forEach(i => {
+        const stock = stockDe(i);
+        if (stock < 1) {
+            cambios.push(i.titulo + ' se agotó y se quitó del carrito');
+        } else if (i.cantidad > stock) {
+            cambios.push('Solo quedan ' + stock + ' de ' + i.titulo);
+            items.push({ ...i, cantidad: stock });
+        } else {
+            items.push(i);
+        }
+    });
+    if (cambios.length) {
+        guardarCarrito(items);
+        avisar(cambios.join('. '));
+    }
+}
+
+// Lo que se manda al servidor para pagar: solo qué artículos y cuántos (los precios los pone el servidor).
+function itemsParaServidor() {
+    return carritoEnMemoria.map(i => ({ clave: i.clave, cantidad: i.cantidad }));
 }
 
 function quitarDelCarrito(clave) {
@@ -93,7 +145,7 @@ function avisar(texto) {
         aviso.id = 'aviso-carrito';
         aviso.style.cssText = 'position:fixed;left:50%;bottom:30px;transform:translateX(-50%);' +
             'background:#000;color:#fff;padding:12px 20px;border-radius:8px;z-index:1000;' +
-            'font-family:sans-serif;box-shadow:0 4px 12px rgba(0,0,0,.3);transition:opacity .3s;max-width:90%;text-align:center';
+            'font-family:inherit;font-size:0.92rem;box-shadow:0 4px 12px rgba(0,0,0,.3);transition:opacity .3s;max-width:90%;text-align:center';
         document.body.appendChild(aviso);
     }
     aviso.textContent = texto;
@@ -121,7 +173,6 @@ function dibujarCarritoMenu() {
         const tdImagen = document.createElement('td');
         const img = document.createElement('img');
         img.src = item.imagen;
-        img.width = 100;
         img.alt = item.titulo;
         tdImagen.appendChild(img);
 
@@ -136,7 +187,8 @@ function dibujarCarritoMenu() {
         borrar.href = '#';
         borrar.className = 'borrar';
         borrar.dataset.clave = item.clave;
-        borrar.textContent = 'X';
+        borrar.textContent = '✕';
+        borrar.setAttribute('aria-label', 'Quitar ' + item.titulo);
         tdBorrar.appendChild(borrar);
 
         fila.append(tdImagen, tdTitulo, tdPrecio, tdBorrar);
@@ -148,13 +200,20 @@ function dibujarCarritoMenu() {
         const td = document.createElement('td');
         td.colSpan = 4;
         td.textContent = 'Tu carrito está vacío';
-        td.style.padding = '10px';
         fila.appendChild(td);
         tbody.appendChild(fila);
     }
 
     const total = document.getElementById('total-mini');
     if (total) total.textContent = formatoPrecio(calcularTotalCarrito());
+
+    // Número de piezas sobre el ícono del carrito
+    const contador = document.getElementById('carrito-contador');
+    if (contador) {
+        const piezas = carritoEnMemoria.reduce((suma, i) => suma + i.cantidad, 0);
+        contador.textContent = piezas > 99 ? '99+' : piezas;
+        contador.hidden = piezas === 0;
+    }
 }
 
 // 2) Carrito de pago (solo existe en la página de productos)
@@ -168,17 +227,19 @@ function dibujarCarritoPago() {
         div.className = 'carrito-item';
         div.dataset.clave = item.clave;
         div.innerHTML = `
-            <img width="80px" alt="">
+            <img alt="">
             <div class="carrito-item-detalles">
                 <span class="carrito-item-titulo"></span>
-                <div class="selector-cantidad">
-                    <i class="fa-solid fa-minus restar-cantidad"></i>
-                    <input type="text" class="carrito-item-cantidad" disabled>
-                    <i class="fa-solid fa-plus sumar-cantidad"></i>
+                <div class="carrito-item-fila">
+                    <div class="selector-cantidad">
+                        <button type="button" class="restar-cantidad" aria-label="Quitar una pieza">−</button>
+                        <input type="text" class="carrito-item-cantidad" disabled aria-label="Cantidad">
+                        <button type="button" class="sumar-cantidad" aria-label="Agregar una pieza">+</button>
+                    </div>
+                    <span class="carrito-item-precio"></span>
                 </div>
-                <span class="carrito-item-precio"></span>
             </div>
-            <button class="btn-eliminar" title="Quitar">
+            <button type="button" class="btn-eliminar" title="Quitar del carrito" aria-label="Quitar del carrito">
                 <i class="fa-solid fa-trash"></i>
             </button>
         `;
@@ -187,22 +248,17 @@ function dibujarCarritoPago() {
         div.querySelector('img').alt = item.titulo;
         div.querySelector('.carrito-item-titulo').textContent = item.titulo;
         div.querySelector('.carrito-item-cantidad').value = item.cantidad;
-        div.querySelector('.carrito-item-precio').textContent = formatoPrecio(item.precio);
+        div.querySelector('.carrito-item-precio').textContent = formatoPrecio(item.precio * item.cantidad);
         contenedor.appendChild(div);
     });
 
     const total = document.querySelector('.carrito-precio-total');
     if (total) total.textContent = formatoPrecio(calcularTotalCarrito());
 
-    // Mostrar u ocultar el panel según tenga o no cosas
-    const carrito = document.querySelector('.carrito');
-    const lista = document.querySelector('.contenedor-items');
+    // Mostrar el panel del carrito junto a los productos solo si tiene algo (ver tienda.css)
     const hayItems = carritoEnMemoria.length > 0;
-    if (carrito) {
-        carrito.style.marginRight = hayItems ? '0' : '-100%';
-        carrito.style.opacity = hayItems ? '1' : '0';
-    }
-    if (lista) lista.style.width = hayItems ? '60%' : '100%';
+    const zona = document.querySelector('.zona-compra');
+    if (zona) zona.classList.toggle('con-carrito', hayItems);
 
     if (!hayItems) {
         const paypal = document.getElementById('paypal-button-container');
@@ -234,7 +290,8 @@ document.addEventListener('click', function (e) {
             clave: 'producto-' + p.dataset.id,
             titulo: p.dataset.titulo,
             precio: parseFloat(p.dataset.precio) || 0,
-            imagen: p.dataset.imagen
+            imagen: p.dataset.imagen,
+            stock: parseInt(p.dataset.stock, 10) || 0
         });
         return;
     }
@@ -272,8 +329,13 @@ window.addEventListener('storage', function (e) {
     }
 });
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', dibujarCarritos);
-} else {
+function iniciarCarrito() {
     dibujarCarritos();
+    ajustarCarritoAlStock();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', iniciarCarrito);
+} else {
+    iniciarCarrito();
 }
