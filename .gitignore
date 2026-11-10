@@ -4,3 +4,5 @@ config.py
 # Python
 __pycache__/
 *.pyc
+
+graphify-out/
