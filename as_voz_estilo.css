@@ -1,0 +1,21 @@
+.btn-vz {
+    position: fixed; /* Posiciona el contenedor de manera fija en la pantalla */
+    width: 80px; /* Tamaño ajustado */
+    height: 80px; /* Tamaño ajustado */
+    line-height: 80px; /* Centra el contenido */
+    bottom: 25px; /* Distancia desde la parte inferior de la pantalla */
+    left: 25px; /* Distancia desde la parte izquierda de la pantalla */
+    color: #FFF; /* Color del texto, si hay */
+    text-align: center; /* Centra el contenido */
+    box-shadow: 0px 1px 10px rgb(222, 0, 0); /* Sombra para que flote */
+    z-index: 100; /* Asegura que el contenedor esté por encima de otros elementos */
+    background-color: transparent; /* Fondo transparente para que el ícono destaque */
+    transition: all 300ms ease; /* Animación suave al interactuar */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el icono */
+}
+
+.btn-vz:hover {
+    background: rgba(0, 68, 255, 0.8); /* Cambia el color de fondo al pasar el mouse */
+    border-radius: 50%; /* Hace el icono circular */
+}
+

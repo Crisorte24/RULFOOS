@@ -1,0 +1,131 @@
+/* Estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #623AA2, #2e0181, #F06B5A); /* Fondo degradado */
+}
+
+h2{
+    color: #fff;
+}
+
+label{
+    color: #fff;
+}
+/* Estilo del contenedor del login */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.login-box {
+    background: rgba(255, 255, 255, 0.1); /* Fondo más claro */
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    color: white;
+    width: 320px;
+    text-align: center;
+}
+
+/* Título */
+.login-box h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: white;
+}
+
+/* Entradas de texto */
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco */
+    color: black; /* Texto en negro */
+}
+
+input[type="text"]::placeholder, input[type="password"]::placeholder {
+    color: #fff; /* Placeholder en blanco */
+}
+
+/* Botón de mostrar/ocultar contraseña */
+.toggle-password {
+    cursor: pointer;
+    color: #fff; /* Texto blanco para mostrar/ocultar */
+    font-size: 12px;
+}
+
+.toggle-password:hover {
+    text-decoration: underline;
+}
+
+/* Checkbox y enlace de recuperar contraseña */
+.options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+}
+
+.options label {
+    color: white;
+}
+
+.options a {
+    color: white;
+    text-decoration: none;
+}
+
+.options a:hover {
+    text-decoration: underline;
+}
+
+/* Botón de envío */
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #409CCF, #366999); /* Botón degradado */
+    border: none;
+    border-radius: 25px; /* Bordes más redondeados */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra para el botón */
+}
+
+.btn-1{
+    display: inline-block;
+    background-color: #8770ec2c;
+    color: #feffff;
+    font-size: 16px;
+    padding: 10px 25px;
+    border-radius: 25px;
+    margin-top: 40px;
+}
+
+.login-btn:hover {
+    background: linear-gradient(45deg, #366999, #409CCF); /* Cambio de color en hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Sombra más intensa en hover */
+}
+
+/* Mensaje de error */
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}

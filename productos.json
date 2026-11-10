@@ -1,0 +1,15 @@
+[
+    {
+      "id": 1,
+      "nombre": "Audífonos Premium",
+      "precio": "150",
+      "imagen": "images/ph1.png"
+    },
+    {
+      "id": 2,
+      "nombre": "Cargador Rápido",
+      "precio": "199",
+      "imagen": "images/ph2.png"
+    }
+  ]
+  

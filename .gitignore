@@ -1,0 +1,6 @@
+# Credenciales privadas
+config.py
+
+# Python
+__pycache__/
+*.pyc

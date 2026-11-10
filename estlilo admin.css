@@ -1,0 +1,129 @@
+/* Estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #623AA2, #2e0181, #F06B5A); /* Fondo degradado */
+}
+
+h1, h2 {
+    color: #fff;
+    text-align: center;
+}
+
+label {
+    color: #fff;
+}
+
+/* Estilo del contenedor del formulario */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Alineación hacia la parte superior */
+    height: 100%;
+    width: 100%; /* Asegúrate de que ocupe todo el ancho */
+    max-width: 1400px; /* Máximo ancho para centrar el contenido */
+    padding: 20px; /* Espaciado alrededor */
+    margin-top: 50px; /* Espacio hacia abajo del contenedor */
+}
+
+.login-box {
+    background: rgba(255, 255, 255, 0.1); /* Fondo más claro */
+    padding: 30px; /* Reducir padding del cuadro */
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    color: white;
+    width: 800px; /* Aumentar el ancho del formulario a 800px */
+    text-align: center;
+}
+
+/* Entradas de texto */
+input[type="text"], input[type="file"] {
+    width: 100%;
+    padding: 12px; /* Reducir padding para mayor ajuste */
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco */
+    color: black; /* Texto en negro */
+}
+
+/* Botones */
+.login-btn, .btn-1 {
+    width: 100%;
+    padding: 12px; /* Mantener padding de los botones */
+    background: linear-gradient(45deg, #409CCF, #366999); /* Botón degradado */
+    border: none;
+    border-radius: 25px; /* Bordes más redondeados */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra para el botón */
+}
+
+.login-btn:hover, .btn-1:hover {
+    background: linear-gradient(45deg, #366999, #409CCF); /* Cambio de color en hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Sombra más intensa en hover */
+}
+
+a, .btn-del {
+    width: 100%;
+    padding: 2px; /* Mantener padding de los botones */
+    background: linear-gradient(45deg, #409CCF, #366999); /* Botón degradado */
+    border: none;
+    border-radius: 25px; /* Bordes más redondeados */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra para el botón */
+    line-height: 3.0;
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    margin-top: 20px; /* Espaciado adicional si es necesario */
+}
+
+.login-btn:hover, .btn-del:hover {
+    background: linear-gradient(45deg, #366999, #409CCF); /* Cambio de color en hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Sombra más intensa en hover */
+}
+
+
+/* Mensaje de error */
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 15px; /* Aumentar el padding de las celdas */
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+tr:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}

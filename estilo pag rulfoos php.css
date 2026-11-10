@@ -1,0 +1,578 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;500;600;700;800&display=swap');
+
+
+/* MODAL */
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed; /* Fijado en la pantalla */
+    z-index: 1000; /* Asegura que esté encima del contenido */
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%); /* Centrado en la pantalla */
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal img {
+    width: 200px; /* Ajusta el tamaño del QR */
+    height: 200px;
+}
+
+.close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: black;
+    background: white;
+    border-radius: 50%;
+    padding: 5px;
+    border: 1px solid #ccc;
+}
+
+
+
+
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+body {
+    background-color: #b1b0b0;
+    font-family: "Poppins", sans-serif;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    min-height: 30vh; /* Reduce el tamaño del header */
+  }
+.swiper-slide {
+    padding: 0 80px 50px 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+    font-size: 25px;
+}
+
+.swiper-button-prev {
+    color: #000000;
+}
+
+.swiper-button-next {
+    color: #000000;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: #000000;
+}
+
+.menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-content: space-between;
+    justify-content: space-between;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 25px;
+    color: #000000;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+.logo #img-logo{
+    right: o;
+    padding: 40px;
+}
+
+.navbar ul li {
+    position: relative;
+    float: left;
+}
+
+.header #img-carrito{
+    width: 40px; /* Cambia el ancho */
+    height: 40px; /* Cambia la altura */
+}
+
+.navbar ul li a {
+    font-size: 18px;
+    padding: 20px;
+    color: #000000;
+    display: block;
+}
+
+.navbar ul li a:hover {
+    color: #000000;
+}
+
+#menu {
+    display: none;
+}
+
+.menu-icono {
+    width: 25px;
+}
+
+.menu label {
+    cursor: pointer;
+    display: none;
+}
+
+.submenu {
+    position: relative;
+}
+
+.submenu #carrito {
+    display: none;
+}
+
+
+
+.submenu:hover #carrito {
+    display: block;
+    position: absolute;
+    right: 0;
+    backdrop-filter: blur(10px);
+    top: 100%;
+    background-color: #4e4b5076;
+    padding: 30px;
+    min-width: 400px;
+}
+
+table{
+    width: 100%;
+}
+
+th, td{
+   color: #000000;
+}
+
+.borrar{
+    background-color: #000000;
+    border-radius: 50%;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #000000;
+    font-weight: 800;
+}
+
+.header-content{
+    padding: 200px 0 100px 0;
+
+}
+
+.header-info{
+    display: flex;
+}
+
+.header-txt{
+    width: 250px;
+}
+
+.header-txt h1{
+    font-size: 50px;
+    color: #000000;
+    text-transform: capitalize;
+    
+}
+
+.header-img{
+    width: 50%;
+    text-align: right;
+}
+
+.header-img img{
+    width: 500px;
+}
+
+.prices{
+    display: flex;
+    margin: 20px 0;
+}
+
+.price-1{
+    font-size: 30px;
+    color: #000000;
+    text-decoration-line: line-through;
+    margin-right: 25px;
+}
+
+.price-2{
+    font-size: 30px;
+    color: #000000 !important;
+}
+
+.btn-1{
+    display: inline-block;
+    background-color: #000000;
+    color: #fcfcfc;
+    font-size: 16px;
+    padding: 10px 25px;
+    border-radius: 25px;
+    margin-top: 40px;
+}
+
+.btn-1:hover{
+    background-color: #000000;
+}
+
+hr{
+    border: 1px solid #00000016;
+
+}
+
+.promos{
+   padding: 50px 0;
+   text-align:center ;
+}
+
+.promos-container h2{
+    font-size: 50px;
+    color: #000000;
+    margin-bottom: 35px;
+    text-align: center;
+ }
+
+
+.promospro-container h2{
+    font-size: 40px;
+    color: #000000;
+    margin: 120px 0 40px;
+    text-align: center;
+
+}
+
+ .servicios-container h2{
+    font-size: 40px;
+    color: #000000;
+    margin: 120px 0 40px;
+    text-align: center;
+ }
+
+ .servicios-container p{
+    font-size: 20px;
+    color: #000000;
+    margin: 70px 0 40px;
+    text-align: center;
+ }
+
+ .servicios-container li{
+    font-size: 20px;
+    color: #000000;
+    margin: 70px 0 40px;
+    text-align: center;
+ }
+
+.categories{
+    text-align: left;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.categorie{
+    display: flex;
+    align-items: center;
+    padding: 35px;
+
+}
+
+.categorie img{
+    width: 150px;
+
+}
+
+.categoria-1{
+    width: 50%;
+}
+
+.categoria-1 h3{
+    color: #000000;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.categoria-1 p{
+    color: #000000;
+    font-size: 18px;
+
+}
+
+.categoria-img{
+    width: 50%;
+}
+
+
+.products{
+    padding: 50px 0;
+
+}
+
+.products h2{
+    font-size: 50px;
+    color: #000000;
+    margin-bottom: 70px;
+    text-align: center;
+}
+
+.product{
+    text-align: center;
+}
+
+.product img{
+    width: 150px;
+    margin-bottom: 15px;
+}
+
+.product-txt h3{
+    font-size: 18px;
+    color: #000000;
+    margin-bottom: 15px;
+}
+
+.product-txt p{
+    color: #000000;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.precio{
+    color: #000000 !important;
+}
+
+.btn-3{
+    display: inline-block;
+    padding: 10px 25px;
+    font-size: 14px;
+    color: #000000;
+    border: 1px solid #000000;
+    border-radius: 25px;
+    margin-top: 15px;
+
+}
+
+.btn-4{
+    display: inline-block;
+    padding: 5px 15px;
+    font-size: 14px;
+    color: #000000;
+    border: 1px solid #000000;
+    border-radius: 25px;
+    margin-top: 15px;
+    margin-left: -25px;
+
+}
+
+.btn-3:hover{
+    background-color: #000000;
+}
+
+.btn-4:hover{
+    background-color: #000000;
+}
+
+.footer{
+    display: flex;
+    padding: 30px 0;
+}
+
+.link h3{
+    color: #000000;
+    margin-bottom: 20px;
+}
+
+.link a{
+    color: #000000;
+    font-size: 16px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.link p{
+    color: #000000;
+    font-size: 16px;
+}
+
+@media(max-width:991px){
+    .menu{
+        padding: 20px;
+    }
+    .menu label{
+        display: initial;
+    }
+    .menu .navbar{
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: #7270EC;
+        display: none;
+    }
+    
+    .menu .navbar ul li{
+        width: 100%;
+    }
+
+    #menu:checked ~ .navbar{
+        display: initial;
+    }
+
+    .logo{
+        display: none;
+    }
+
+    .submenu:hover #carrito{
+         min-width: 100%;
+    }
+
+    .mySwiper-1{
+        width: 300px;
+    }
+
+    .swiper-slide{
+        padding: 0 30px 50px 30px;
+    }
+
+    .header-content{
+        padding: 100px 0 50px 0;
+    }
+
+    .header-info{
+        padding: 0;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .header-txt{
+        width: 100%;
+    }
+
+    .header-txt h1{
+        font-size: 40px;
+    }
+
+    .header-img{
+        width: 100px;
+    }
+
+    .header-img img{
+        width: 200px;
+    }
+
+    .prices{
+        flex-direction: column;
+    }
+
+    .price-1{
+        margin: 0;
+    }
+
+    .btn-1{
+        margin: 20px 0;
+    }
+
+    .promos{
+        padding: 30px;
+    }
+
+    .promos h2{
+        font-size: 40px;
+        margin-bottom: 0;
+    }
+   
+    .categories{
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .categorie{
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .categoria-1{
+        width: 100%;
+        margin-bottom: 25px;
+        order: -1;
+    }
+
+    .categoria-img{
+        width: 100%;
+    }
+
+    .product{
+        padding: 100%;
+    }
+
+    .products h2{
+        font-size: 40px;
+        margin-bottom: 40px;
+    }
+
+    .footer{
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .link{
+       width: 100%;
+    }
+
+}
+
+.btn-qr {
+    display: inline-block;
+    padding: 8px 14px;
+    background-color: #0056b3; /* Azul fuerte */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-qr:hover {
+    background-color: #003d80; /* Azul más oscuro al pasar el mouse */
+    transform: scale(1.05);
+}
+
+.btn-qr:active {
+    transform: scale(0.95);
+}
+
+
